@@ -4,10 +4,10 @@
     "slug": "riven",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-icon-ldt.png",
+    "icon": "./assets/images/55.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/app-icon-ldt.png",
+      "image": "./assets/images/55.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon-ldt.png",
+        "foregroundImage": "./assets/images/55.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.placeholder.app"
