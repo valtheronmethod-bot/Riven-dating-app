@@ -46,8 +46,8 @@ export default function ProfileScreen() {
   };
 
   const handleGoPremium = () => {
-    console.log('[Profile] Go Premium pressed from profile tab');
-    router.push('/premium');
+    console.log('[Profile] Go Premium pressed from profile tab — navigating to paywall');
+    router.push('/paywall');
   };
 
   const completenessWidth = `${MY_PROFILE.completeness}%` as `${number}%`;

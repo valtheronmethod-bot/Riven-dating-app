@@ -95,6 +95,7 @@ export default function RootLayout() {
                   <Stack.Screen name="edit-profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
                   <Stack.Screen name="settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
                   <Stack.Screen name="premium" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+                  <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
                 </Stack>
                 <SystemBars style="light" />
               </GestureHandlerRootView>

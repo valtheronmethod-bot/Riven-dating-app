@@ -2,27 +2,21 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// TEMPLATE_MARKER: revenuecat-subscription-context
 const PREMIUM_KEY = '@riven_is_premium';
-const RC_API_KEY_IOS = '';
-const RC_API_KEY_ANDROID = '';
-const ENTITLEMENT_ID = 'pro';
+const RC_API_KEY_IOS = 'appl_placeholder';
+const RC_API_KEY_ANDROID = 'goog_placeholder';
+const ENTITLEMENT_ID = 'premium';
 
-interface Package {
-  identifier: string;
-  product: {
-    title: string;
-    description: string;
-    priceString: string;
-    price: number;
-  };
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PurchasesPackage = any;
 
 interface SubscriptionContextType {
   isPremium: boolean;
   setPremium: (value: boolean) => Promise<void>;
   isLoading: boolean;
-  packages: Package[];
-  purchasePackage: (pkg: Package) => Promise<boolean>;
+  packages: PurchasesPackage[];
+  purchasePackage: (pkg: PurchasesPackage) => Promise<boolean>;
   restorePurchases: () => Promise<boolean>;
   currentPrice: string;
 }
@@ -52,7 +46,7 @@ try {
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
   const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [packages, setPackages] = useState<Package[]>([]);
+  const [packages, setPackages] = useState<PurchasesPackage[]>([]);
   const [currentPrice, setCurrentPrice] = useState('$19.99/mo');
 
   useEffect(() => {
@@ -73,10 +67,15 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       }
 
       const apiKey = Platform.OS === 'ios' ? RC_API_KEY_IOS : RC_API_KEY_ANDROID;
-      if (!apiKey) {
+      if (!apiKey || apiKey === 'appl_placeholder' || apiKey === 'goog_placeholder') {
         console.log('[Subscription] No RevenueCat API key configured, using cached state');
         setIsLoading(false);
         return;
+      }
+
+      if (__DEV__) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (Purchases as any).setLogLevel?.('DEBUG');
       }
 
       await Purchases.configure({ apiKey });
@@ -92,10 +91,11 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       // Load offerings
       const offerings = await Purchases.getOfferings();
       if (offerings.current) {
-        const pkgs = offerings.current.availablePackages as Package[];
+        const pkgs = offerings.current.availablePackages as PurchasesPackage[];
         setPackages(pkgs);
         if (pkgs.length > 0) {
-          setCurrentPrice(pkgs[0].product.priceString + '/mo');
+          const priceStr = pkgs[0].product?.priceString;
+          if (priceStr) setCurrentPrice(priceStr + '/mo');
         }
         console.log('[Subscription] Packages loaded:', pkgs.length);
       }
@@ -112,14 +112,15 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     await AsyncStorage.setItem(PREMIUM_KEY, value ? 'true' : 'false');
   }, []);
 
-  const purchasePackage = useCallback(async (pkg: Package): Promise<boolean> => {
-    console.log('[Subscription] Purchasing package:', pkg.identifier, pkg.product.priceString);
+  const purchasePackage = useCallback(async (pkg: PurchasesPackage): Promise<boolean> => {
+    console.log('[Subscription] Purchasing package:', pkg?.identifier, pkg?.product?.priceString);
     if (!Purchases) {
       console.log('[Subscription] RevenueCat not available — simulating purchase');
       await setPremium(true);
       return true;
     }
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await (Purchases as any).purchasePackage(pkg);
       const active = !!result.customerInfo.entitlements.active[ENTITLEMENT_ID];
       console.log('[Subscription] Purchase result — premium active:', active);
@@ -127,12 +128,13 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         await setPremium(true);
       }
       return active;
-    } catch (err: any) {
-      if (err?.userCancelled) {
+    } catch (err: unknown) {
+      const e = err as { userCancelled?: boolean; message?: string };
+      if (e?.userCancelled) {
         console.log('[Subscription] Purchase cancelled by user');
         return false;
       }
-      console.log('[Subscription] Purchase error:', err?.message ?? err);
+      console.log('[Subscription] Purchase error:', e?.message ?? err);
       throw err;
     }
   }, [setPremium]);

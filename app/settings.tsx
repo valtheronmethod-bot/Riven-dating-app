@@ -55,8 +55,8 @@ export default function SettingsScreen() {
   };
 
   const handlePremium = () => {
-    console.log('[Settings] Premium pressed');
-    router.push('/premium');
+    console.log('[Settings] Premium pressed — navigating to paywall');
+    router.push('/paywall');
   };
 
   const handleHelpCenter = () => {
