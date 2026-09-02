@@ -16,6 +16,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { WidgetProvider } from "@/contexts/WidgetContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -77,7 +78,8 @@ export default function RootLayout() {
   }
 
   return (
-    <DevErrorBoundary>
+    <NotificationProvider>
+  <DevErrorBoundary>
       <StatusBar style="light" animated />
       <ThemeProvider value={RivenDarkTheme}>
         <SafeAreaProvider>
@@ -96,6 +98,7 @@ export default function RootLayout() {
                   <Stack.Screen name="settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
                   <Stack.Screen name="premium" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
                   <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
+                  <Stack.Screen name="notification-preferences" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 </Stack>
                 <SystemBars style="light" />
               </GestureHandlerRootView>
@@ -104,5 +107,6 @@ export default function RootLayout() {
         </SafeAreaProvider>
       </ThemeProvider>
     </DevErrorBoundary>
+    </NotificationProvider>
   );
 }

@@ -13,9 +13,18 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.placeholder.app",
+      "bundleIdentifier": "com.riven.app",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
+      },
+      "entitlements": {
+        "aps-environment": "production",
+        "com.apple.security.application-groups": [
+          "group.com.riven.app.onesignal"
+        ]
       }
     },
     "android": {
@@ -23,13 +32,19 @@
         "foregroundImage": "./assets/images/55.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.placeholder.app"
+      "package": "com.riven.app"
     },
     "web": {
       "favicon": "./assets/images/newly.png",
       "bundler": "metro"
     },
     "plugins": [
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "production"
+        }
+      ],
       "expo-font",
       "expo-router",
       "expo-web-browser",
@@ -40,7 +55,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {}
+      "router": {},
+      "oneSignalAppId": "9135199d-954a-4172-aa70-cb899ecf2b32"
     }
   }
 }

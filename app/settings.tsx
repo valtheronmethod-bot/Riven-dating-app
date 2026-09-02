@@ -50,8 +50,8 @@ export default function SettingsScreen() {
   };
 
   const handleNotifications = () => {
-    console.log('[Settings] Notifications pressed');
-    Alert.alert('Notifications', 'Notification settings coming soon.');
+    console.log('[Settings] Notifications pressed — navigating to notification-preferences');
+    router.push('/notification-preferences');
   };
 
   const handlePremium = () => {
