@@ -14,7 +14,9 @@ import { ProfileCard, Profile } from '@/components/ProfileCard';
 import { AdBanner } from '@/components/AdBanner';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const CARD_WIDTH = SCREEN_WIDTH - 32;
+const CARD_HEIGHT = SCREEN_HEIGHT * 0.62;
 
 const MOCK_PROFILES: Profile[] = [
   { id: '1', name: 'Sophia', age: 26, distance: '2 miles', bio: "Adventure seeker & coffee enthusiast. Let's explore the city together.", interests: ['Hiking', 'Coffee', 'Travel'], verified: true },
@@ -224,13 +226,16 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   cardStack: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
+    justifyContent: 'flex-start',
+    paddingTop: 8,
+    width: '100%',
+    height: CARD_HEIGHT + 24,
   },
   cardWrapper: {
     position: 'absolute',
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     alignItems: 'center',
   },
   premiumFloatBtn: {
