@@ -44,6 +44,12 @@ export function NearbyMap({ clusters, centerLat, centerLng, onClusterTap }: Near
     .cluster-popup-dist { font-size: 12px; color: #A09CA8; margin-bottom: 8px; }
     .cluster-popup-note { font-size: 11px; color: #5C5868; font-style: italic; }
     .leaflet-control-attribution { display: none !important; }
+    .leaflet-tile {
+      filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) saturate(0.8);
+    }
+    .leaflet-container {
+      background: #0D0D0F;
+    }
   </style>
 </head>
 <body>
@@ -56,7 +62,7 @@ export function NearbyMap({ clusters, centerLat, centerLng, onClusterTap }: Near
     attributionControl: false
   });
 
-  L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 16,
     minZoom: 11,
     attribution: ''
