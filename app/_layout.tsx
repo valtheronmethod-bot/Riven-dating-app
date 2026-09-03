@@ -6,8 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { SystemBars } from "react-native-edge-to-edge";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useColorScheme, Alert } from "react-native";
-import { useNetworkState } from "expo-network";
+import { useColorScheme } from "react-native";
 import {
   DarkTheme,
   Theme,
@@ -40,7 +39,6 @@ const RivenDarkTheme: Theme = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const networkState = useNetworkState();
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   const [loaded] = useFonts({
@@ -60,18 +58,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded, initialRoute]);
-
-  React.useEffect(() => {
-    if (
-      !networkState.isConnected &&
-      networkState.isInternetReachable === false
-    ) {
-      Alert.alert(
-        "You are offline",
-        "You can keep using the app! Your changes will be saved locally and synced when you are back online."
-      );
-    }
-  }, [networkState.isConnected, networkState.isInternetReachable]);
 
   if (!loaded || initialRoute === null) {
     return null;

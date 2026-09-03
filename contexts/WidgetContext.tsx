@@ -1,11 +1,6 @@
 import * as React from "react";
-import { createContext, useCallback, useContext } from "react";
-import { ExtensionStorage } from "@bacons/apple-targets";
-
-// Initialize storage with your group ID
-const storage = new ExtensionStorage(
-  "group.com.<user_name>.<app_name>"
-);
+import { createContext, useCallback, useContext, useRef } from "react";
+import { Platform } from "react-native";
 
 type WidgetContextType = {
   refreshWidget: () => void;
@@ -14,17 +9,35 @@ type WidgetContextType = {
 const WidgetContext = createContext<WidgetContextType | null>(null);
 
 export function WidgetProvider({ children }: { children: React.ReactNode }) {
-  // Update widget state whenever what we want to show changes
-  React.useEffect(() => {
-    // set widget_state to null if we want to reset the widget
-    // storage.set("widget_state", null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const storageRef = useRef<any>(null);
 
-    // Refresh widget
-    ExtensionStorage.reloadWidget();
+  React.useEffect(() => {
+    if (Platform.OS !== "ios") return;
+
+    try {
+      // Dynamically require to avoid Android bundling the native module
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { ExtensionStorage } = require("@bacons/apple-targets");
+      storageRef.current = new ExtensionStorage("group.com.riven.app");
+      console.log("[WidgetContext] ExtensionStorage initialized");
+      ExtensionStorage.reloadWidget();
+      console.log("[WidgetContext] Widget reloaded on mount");
+    } catch (e) {
+      console.warn("[WidgetContext] Failed to initialize ExtensionStorage:", e);
+    }
   }, []);
 
   const refreshWidget = useCallback(() => {
-    ExtensionStorage.reloadWidget();
+    if (Platform.OS !== "ios") return;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { ExtensionStorage } = require("@bacons/apple-targets");
+      console.log("[WidgetContext] refreshWidget called");
+      ExtensionStorage.reloadWidget();
+    } catch (e) {
+      console.warn("[WidgetContext] Failed to reload widget:", e);
+    }
   }, []);
 
   return (
