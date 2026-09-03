@@ -19,7 +19,7 @@ export function WidgetProvider({ children }: { children: React.ReactNode }) {
       // Dynamically require to avoid Android bundling the native module
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { ExtensionStorage } = require("@bacons/apple-targets");
-      storageRef.current = new ExtensionStorage("group.com.rivenapp.dating");
+      storageRef.current = new ExtensionStorage("group.com.valtheron.riven");
       console.log("[WidgetContext] ExtensionStorage initialized");
       ExtensionStorage.reloadWidget();
       console.log("[WidgetContext] Widget reloaded on mount");
