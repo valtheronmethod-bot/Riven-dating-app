@@ -67,12 +67,13 @@ const VIEWED_ME = [
   { id: 'vm8', name: 'Hana', age: 25 },
 ];
 
-type TabKey = 'liked_me' | 'i_liked' | 'viewed_me';
+type TabKey = 'liked_me' | 'i_liked' | 'viewed_me' | 'messages';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'liked_me', label: 'Liked Me' },
   { key: 'i_liked', label: 'I Liked' },
   { key: 'viewed_me', label: 'Viewed Me' },
+  { key: 'messages', label: 'Messages' },
 ];
 
 interface Profile {
@@ -136,7 +137,7 @@ export default function MatchesScreen() {
   const router = useRouter();
   const { isPremium } = useSubscription();
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabKey>('liked_me');
+  const [activeTab, setActiveTab] = useState<TabKey>('messages');
 
   useEffect(() => {
     console.log('[Matches] Loading matches...');
@@ -172,18 +173,19 @@ export default function MatchesScreen() {
     router.push(`/chat/${profileId}`);
   };
 
-  const tabData: Record<TabKey, Profile[]> = {
+  const tabData: Record<Exclude<TabKey, 'messages'>, Profile[]> = {
     liked_me: LIKED_ME,
     i_liked: I_LIKED,
     viewed_me: VIEWED_ME,
   };
 
   const isTabLocked = (tab: TabKey): boolean => {
-    if (tab === 'i_liked') return false;
+    if (tab === 'i_liked' || tab === 'messages') return false;
     return !isPremium;
   };
 
-  const currentProfiles = tabData[activeTab];
+  const isGridTab = activeTab !== 'messages';
+  const currentProfiles = isGridTab ? tabData[activeTab as Exclude<TabKey, 'messages'>] : [];
   const locked = isTabLocked(activeTab);
 
   // Pair profiles into rows of 2
@@ -234,13 +236,6 @@ export default function MatchesScreen() {
         })}
       </ScrollView>
 
-      {/* Ad banner for free users */}
-      {!isPremium && (
-        <View style={styles.adSection}>
-          <AdBanner />
-        </View>
-      )}
-
       {/* Tabbed section */}
       <View style={styles.tabSection}>
         {/* Tab bar */}
@@ -262,59 +257,70 @@ export default function MatchesScreen() {
           })}
         </View>
 
-        {/* Grid */}
-        <View style={styles.grid}>
-          {rows.map((row, rowIndex) => {
-            const rowKey = `row-${rowIndex}`;
-            return (
-              <View key={rowKey} style={styles.gridRow}>
-                {row.map((profile) => (
-                  <ProfileCard
-                    key={profile.id}
-                    profile={profile}
-                    locked={locked}
-                    showPending={activeTab === 'i_liked'}
-                    onPress={() => handleCardPress(profile.id, profile.name)}
-                    onUpgrade={handleUpgradePress}
-                  />
-                ))}
-                {/* Fill empty slot if odd number */}
-                {row.length === 1 && <View style={{ width: CARD_WIDTH }} />}
-              </View>
-            );
-          })}
-        </View>
-      </View>
-
-      {/* Messages section */}
-      <Text style={styles.sectionTitle}>Messages</Text>
-      {MOCK_MATCHES.map((match) => {
-        const imageUri = `https://picsum.photos/seed/${match.id}/200/200`;
-        return (
-          <TouchableOpacity
-            key={match.id}
-            style={styles.messageItem}
-            onPress={() => handleMatchPress(match.id, match.name)}
-          >
-            <View style={styles.avatarWrapper}>
-              <Image source={resolveImageSource(imageUri)} style={styles.avatar} />
-              {match.online && <View style={styles.onlineDot} />}
-            </View>
-            <View style={styles.messageContent}>
-              <View style={styles.messageHeader}>
-                <Text style={styles.matchName}>{match.name}</Text>
-                <Text style={styles.messageTime}>{match.time}</Text>
-              </View>
-              <Text style={styles.lastMessage} numberOfLines={1}>{match.lastMessage}</Text>
-            </View>
-            {match.unread > 0 && (
-              <View style={styles.unreadBadge}>
-                <Text style={styles.unreadText}>{match.unread}</Text>
+        {/* Messages tab content */}
+        {activeTab === 'messages' && (
+          <View>
+            {/* Ad banner for free users */}
+            {!isPremium && (
+              <View style={styles.adSection}>
+                <AdBanner />
               </View>
             )}
-          </TouchableOpacity>
-        );
-      })}
+            {MOCK_MATCHES.map((match) => {
+              const imageUri = `https://picsum.photos/seed/${match.id}/200/200`;
+              return (
+                <TouchableOpacity
+                  key={match.id}
+                  style={styles.messageItem}
+                  onPress={() => handleMatchPress(match.id, match.name)}
+                >
+                  <View style={styles.avatarWrapper}>
+                    <Image source={resolveImageSource(imageUri)} style={styles.avatar} />
+                    {match.online && <View style={styles.onlineDot} />}
+                  </View>
+                  <View style={styles.messageContent}>
+                    <View style={styles.messageHeader}>
+                      <Text style={styles.matchName}>{match.name}</Text>
+                      <Text style={styles.messageTime}>{match.time}</Text>
+                    </View>
+                    <Text style={styles.lastMessage} numberOfLines={1}>{match.lastMessage}</Text>
+                  </View>
+                  {match.unread > 0 && (
+                    <View style={styles.unreadBadge}>
+                      <Text style={styles.unreadText}>{match.unread}</Text>
+                    </View>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Grid tab content (Liked Me / I Liked / Viewed Me) */}
+        {isGridTab && (
+          <View style={styles.grid}>
+            {rows.map((row, rowIndex) => {
+              const rowKey = `row-${rowIndex}`;
+              return (
+                <View key={rowKey} style={styles.gridRow}>
+                  {row.map((profile) => (
+                    <ProfileCard
+                      key={profile.id}
+                      profile={profile}
+                      locked={locked}
+                      showPending={activeTab === 'i_liked'}
+                      onPress={() => handleCardPress(profile.id, profile.name)}
+                      onUpgrade={handleUpgradePress}
+                    />
+                  ))}
+                  {/* Fill empty slot if odd number */}
+                  {row.length === 1 && <View style={{ width: CARD_WIDTH }} />}
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 }
@@ -396,7 +402,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   adSection: {
-    marginTop: 8,
+    marginBottom: 8,
   },
   // Tab section
   tabSection: {
@@ -421,7 +427,7 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     color: COLORS.textSecondary,
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: '600',
   },
   tabLabelActive: {
@@ -454,10 +460,8 @@ const styles = StyleSheet.create({
     right: 0,
     height: 70,
     backgroundColor: 'transparent',
-    // Simulate gradient with a semi-transparent overlay
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
-    background: 'linear-gradient(transparent, rgba(13,13,15,0.95))',
   },
   cardInfo: {
     position: 'absolute',
@@ -525,7 +529,7 @@ const styles = StyleSheet.create({
   messageItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 4,
     paddingVertical: 12,
     gap: 14,
     borderBottomWidth: 1,
