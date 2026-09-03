@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.riven.app",
+      "bundleIdentifier": "com.rivenapp.dating",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
@@ -23,7 +23,7 @@
       "entitlements": {
         "aps-environment": "production",
         "com.apple.security.application-groups": [
-          "group.com.riven.app.onesignal"
+          "group.com.rivenapp.dating.onesignal"
         ]
       }
     },
@@ -32,7 +32,7 @@
         "foregroundImage": "./assets/images/55.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.riven.app"
+      "package": "com.rivenapp.dating"
     },
     "web": {
       "favicon": "./assets/images/newly.png",
