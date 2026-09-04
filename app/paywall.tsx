@@ -38,7 +38,7 @@ export default function PaywallScreen() {
         if (success) {
           console.log('[Paywall] Purchase successful — navigating to tabs');
           Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.', [
-            { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)') },
+            { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)/(discover)') },
           ]);
         }
       } catch (err: unknown) {
@@ -64,7 +64,7 @@ export default function PaywallScreen() {
               try {
                 await purchasePackage({} as never);
                 Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.', [
-                  { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)') },
+                  { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)/(discover)') },
                 ]);
               } finally {
                 setPurchasing(false);
@@ -83,7 +83,7 @@ export default function PaywallScreen() {
       const success = await restorePurchases();
       if (success) {
         Alert.alert('Restored!', 'Your premium subscription has been restored.', [
-          { text: 'Continue', onPress: () => router.replace('/(tabs)') },
+          { text: 'Continue', onPress: () => router.replace('/(tabs)/(discover)') },
         ]);
       } else {
         Alert.alert('No Purchases Found', 'No previous premium subscription was found for this account.');

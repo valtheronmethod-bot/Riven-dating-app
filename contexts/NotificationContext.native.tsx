@@ -73,6 +73,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
     let OneSignalModule: any;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       OneSignalModule = require("react-native-onesignal").OneSignal;
     } catch (e) {
       console.warn("[OneSignal] Failed to load module:", e);
@@ -112,9 +113,11 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
       };
     } catch (error) {
       console.error("[OneSignal] Initialization error:", error);
+      return undefined;
     } finally {
       setLoading(false);
     }
+    return undefined;
   }, []);
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
@@ -122,6 +125,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     if (isWeb || !isOneSignalAvailable()) return false;
     let OneSignalModule: any;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       OneSignalModule = require("react-native-onesignal").OneSignal;
       const granted = await OneSignalModule.Notifications.requestPermission(true);
       console.log("[OneSignal] Permission request result:", granted);
@@ -138,6 +142,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     console.log("[OneSignal] sendTag:", key, value);
     if (isWeb || !isOneSignalAvailable()) return;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require("react-native-onesignal").OneSignal.User.addTag(key, value);
     } catch (error) {
       console.error("[OneSignal] sendTag failed:", error);
@@ -148,6 +153,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     console.log("[OneSignal] deleteTag:", key);
     if (isWeb || !isOneSignalAvailable()) return;
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require("react-native-onesignal").OneSignal.User.removeTag(key);
     } catch (error) {
       console.error("[OneSignal] deleteTag failed:", error);
