@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '@/constants/Colors';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { AnimatedPressable } from '@/components/AnimatedPressable';
+import { useVerification } from '@/contexts/VerificationContext';
 
 const LOGO_URL = 'https://prod-finalquest-user-projects-storage-bucket-aws.s3.amazonaws.com/user-projects/b786ed0f-b3a9-4fd9-a451-af874d7211fa/assets/images/7c2e5bc3-c614-429b-bb28-aa6d240f2cae.png';
 
@@ -33,7 +34,15 @@ const MY_PROFILE = {
 export default function ProfileScreen() {
   const router = useRouter();
   const { isPremium } = useSubscription();
+  const { isVerified, verificationTier } = useVerification();
   const avatarUri = 'https://picsum.photos/seed/myprofile/400/400';
+
+  const handleVerifyNow = () => {
+    console.log('[Profile] Verify Now pressed — navigating to /verification');
+    router.push('/verification');
+  };
+
+  const verificationTierLabel = verificationTier === 'premium' ? 'Premium' : verificationTier === 'free' ? 'Free' : '';
 
   const handleEditProfile = () => {
     console.log('[Profile] Edit profile pressed');
@@ -72,8 +81,20 @@ export default function ProfileScreen() {
               <Text style={styles.premiumBadgeText}>⭐ Premium</Text>
             </View>
           )}
+          {isVerified && (
+            <View style={styles.verifiedAvatarBadge}>
+              <Text style={styles.verifiedAvatarBadgeText}>✓</Text>
+            </View>
+          )}
         </View>
-        <Text style={styles.profileName}>{MY_PROFILE.name}</Text>
+        <View style={styles.nameRow}>
+          <Text style={styles.profileName}>{MY_PROFILE.name}</Text>
+          {isVerified && (
+            <View style={styles.verifiedNameBadge}>
+              <Text style={styles.verifiedNameBadgeText}>✓</Text>
+            </View>
+          )}
+        </View>
         <Text style={styles.profileAge}>{MY_PROFILE.age} years old</Text>
         <Text style={styles.profileBio}>{MY_PROFILE.bio}</Text>
 
@@ -97,6 +118,34 @@ export default function ProfileScreen() {
         </View>
         <Text style={styles.completenessHint}>Add more photos to boost your profile</Text>
       </View>
+
+      {/* Verification card */}
+      {isVerified ? (
+        <View style={styles.verifiedCard}>
+          <View style={styles.verifiedCardLeft}>
+            <View style={styles.verifiedShield}>
+              <Text style={styles.verifiedShieldText}>✓</Text>
+            </View>
+            <View>
+              <Text style={styles.verifiedCardTitle}>✓ Identity Verified</Text>
+              <Text style={styles.verifiedCardSubtitle}>{verificationTierLabel ? verificationTierLabel + ' Verification' : 'Verified'}</Text>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <TouchableOpacity style={styles.getVerifiedCard} onPress={handleVerifyNow} activeOpacity={0.85}>
+          <View style={styles.getVerifiedLeft}>
+            <View style={styles.getVerifiedIcon}>
+              <Text style={styles.getVerifiedIconText}>🛡️</Text>
+            </View>
+            <View style={styles.getVerifiedContent}>
+              <Text style={styles.getVerifiedTitle}>Get Verified</Text>
+              <Text style={styles.getVerifiedSubtitle}>Verify your identity to build trust</Text>
+            </View>
+          </View>
+          <Text style={styles.getVerifiedArrow}>Verify Now →</Text>
+        </TouchableOpacity>
+      )}
 
       {/* Stats */}
       <View style={styles.statsCard}>
@@ -226,7 +275,6 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     fontSize: 24,
     fontWeight: '800',
-    marginBottom: 2,
   },
   profileAge: {
     color: COLORS.textSecondary,
@@ -373,6 +421,138 @@ const styles = StyleSheet.create({
   editBtnText: {
     color: COLORS.text,
     fontSize: 16,
+    fontWeight: '700',
+  },
+  // Verified avatar badge
+  verifiedAvatarBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.background,
+  },
+  verifiedAvatarBadgeText: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '900',
+  },
+  // Name row with verified badge
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 2,
+  },
+  verifiedNameBadge: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  verifiedNameBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '900',
+  },
+  // Verified card
+  verifiedCard: {
+    marginHorizontal: 16,
+    backgroundColor: 'rgba(34,197,94,0.1)',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(34,197,94,0.35)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  verifiedCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  verifiedShield: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(34,197,94,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(34,197,94,0.5)',
+  },
+  verifiedShieldText: {
+    color: '#22C55E',
+    fontSize: 18,
+    fontWeight: '900',
+  },
+  verifiedCardTitle: {
+    color: '#22C55E',
+    fontSize: 14,
+    fontWeight: '800',
+    marginBottom: 2,
+  },
+  verifiedCardSubtitle: {
+    color: 'rgba(34,197,94,0.7)',
+    fontSize: 12,
+  },
+  // Get verified card
+  getVerifiedCard: {
+    marginHorizontal: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  getVerifiedLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  getVerifiedIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: COLORS.primaryMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(200,16,46,0.3)',
+  },
+  getVerifiedIconText: {
+    fontSize: 18,
+  },
+  getVerifiedContent: {
+    flex: 1,
+  },
+  getVerifiedTitle: {
+    color: COLORS.text,
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  getVerifiedSubtitle: {
+    color: COLORS.textSecondary,
+    fontSize: 12,
+  },
+  getVerifiedArrow: {
+    color: COLORS.primary,
+    fontSize: 13,
     fontWeight: '700',
   },
   premiumCard: {

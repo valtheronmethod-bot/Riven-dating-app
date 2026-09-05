@@ -74,9 +74,9 @@ export default function OnboardingScreen() {
   };
 
   const handleGetStarted = async () => {
-    console.log('[Onboarding] Get Started pressed — marking onboarding complete');
+    console.log('[Onboarding] Get Started pressed — marking onboarding complete, navigating to verification');
     await AsyncStorage.setItem('@riven_has_onboarded', 'true');
-    router.replace('/(tabs)/(discover)');
+    router.replace('/verification');
   };
 
   const handleSkip = () => {

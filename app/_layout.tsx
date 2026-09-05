@@ -16,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { WidgetProvider } from "@/contexts/WidgetContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
+import { VerificationProvider } from "@/contexts/VerificationContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -70,6 +71,7 @@ export default function RootLayout() {
       <ThemeProvider value={RivenDarkTheme}>
         <SafeAreaProvider>
           <SubscriptionProvider>
+            <VerificationProvider>
             <WidgetProvider>
               <GestureHandlerRootView style={{ flex: 1 }}>
                 <Stack initialRouteName={initialRoute}>
@@ -85,10 +87,12 @@ export default function RootLayout() {
                   <Stack.Screen name="premium" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
                   <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
                   <Stack.Screen name="notification-preferences" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                  <Stack.Screen name="verification" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
                 </Stack>
                 <SystemBars style="light" />
               </GestureHandlerRootView>
             </WidgetProvider>
+            </VerificationProvider>
           </SubscriptionProvider>
         </SafeAreaProvider>
       </ThemeProvider>
