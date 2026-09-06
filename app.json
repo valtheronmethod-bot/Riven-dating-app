@@ -18,7 +18,10 @@
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
           "remote-notification"
-        ]
+        ],
+        "NSLocationWhenInUseUsageDescription": "Riven uses your location to show you people nearby.",
+        "NSCameraUsageDescription": "Riven needs camera access to take profile photos and verify your identity.",
+        "NSPhotoLibraryUsageDescription": "Riven needs photo library access to upload your profile pictures."
       },
       "entitlements": {
         "aps-environment": "production",
