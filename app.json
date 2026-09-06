@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Riven",
-    "slug": "riven",
+    "slug": "riven-dating-app-htrpwg",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon-1024.png",
@@ -37,10 +37,6 @@
       },
       "package": "com.valtheron.riven"
     },
-    "notification": {
-      "icon": "./assets/images/notification-icon.png",
-      "color": "#0D0D0F"
-    },
     "web": {
       "favicon": "./assets/images/newly.png",
       "bundler": "metro"
@@ -50,6 +46,13 @@
         "onesignal-expo-plugin",
         {
           "mode": "production"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#0D0D0F"
         }
       ],
       "expo-font",
