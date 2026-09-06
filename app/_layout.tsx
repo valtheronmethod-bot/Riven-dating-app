@@ -20,9 +20,9 @@ import { VerificationProvider } from "@/contexts/VerificationContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const DevErrorBoundary = __DEV__
-  ? ErrorBoundary
-  : ({ children }: { children: React.ReactNode }) => <>{children}</>;
+// ErrorBoundary is always active (dev + production) so crashes show an error
+// screen instead of a hard crash with no feedback.
+const DevErrorBoundary = ErrorBoundary;
 
 SplashScreen.preventAutoHideAsync();
 

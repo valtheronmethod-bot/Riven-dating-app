@@ -35,12 +35,20 @@ const SubscriptionContext = createContext<SubscriptionContextType>({
 let Purchases: typeof import('react-native-purchases').default | null = null;
 
 try {
-  // Dynamic require for graceful fallback on web/simulator
+  // Dynamic require for graceful fallback on web/simulator.
+  // We also null-check the result because on some Android builds the native
+  // module may load without throwing but still return an empty/broken object.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require('react-native-purchases') as { default: typeof import('react-native-purchases').default };
-  Purchases = mod.default;
-} catch {
-  console.log('[Subscription] react-native-purchases not available (web/simulator)');
+  const mod = require('react-native-purchases') as { default: typeof import('react-native-purchases').default } | null | undefined;
+  const candidate = mod?.default ?? null;
+  // Verify the module is actually usable before trusting it
+  if (candidate && typeof (candidate as { configure?: unknown }).configure === 'function') {
+    Purchases = candidate;
+  } else {
+    console.log('[Subscription] react-native-purchases loaded but native module is not functional');
+  }
+} catch (err) {
+  console.log('[Subscription] react-native-purchases not available (web/simulator):', err);
 }
 
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
