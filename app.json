@@ -21,7 +21,11 @@
         ],
         "NSLocationWhenInUseUsageDescription": "Riven uses your location to show you people nearby.",
         "NSCameraUsageDescription": "Riven needs camera access to take profile photos and verify your identity.",
-        "NSPhotoLibraryUsageDescription": "Riven needs photo library access to upload your profile pictures."
+        "NSPhotoLibraryUsageDescription": "Riven needs photo library access to upload your profile pictures.",
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false,
+          "NSExceptionDomains": {}
+        }
       },
       "entitlements": {
         "aps-environment": "production",
@@ -35,7 +39,8 @@
         "foregroundImage": "./assets/images/icon-1024.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.valtheron.riven"
+      "package": "com.valtheron.riven",
+      "usesCleartextTraffic": false
     },
     "web": {
       "favicon": "./assets/images/newly.png",
