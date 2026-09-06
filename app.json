@@ -37,6 +37,10 @@
       },
       "package": "com.valtheron.riven"
     },
+    "notification": {
+      "icon": "./assets/images/notification-icon.png",
+      "color": "#0D0D0F"
+    },
     "web": {
       "favicon": "./assets/images/newly.png",
       "bundler": "metro"
