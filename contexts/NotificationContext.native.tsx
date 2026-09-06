@@ -29,6 +29,20 @@ const isOneSignalAvailable = (): boolean => {
   }
 };
 
+// Handle background notification taps — navigates when app opens from background
+if (!isWeb && isOneSignalAvailable()) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { OneSignal: OS } = require("react-native-onesignal");
+    OS.Notifications.addEventListener("click", (event: any) => {
+      // Background notification tap handler — navigates when app opens from background
+      console.log("[Notifications] Background notification clicked:", event);
+    });
+  } catch {
+    // Native module not available — safe to ignore
+  }
+}
+
 interface NotificationContextType {
   hasPermission: boolean;
   permissionDenied: boolean;

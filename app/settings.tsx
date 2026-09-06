@@ -93,30 +93,12 @@ export default function SettingsScreen() {
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Request Deletion',
-          onPress: () => {
-            console.log('[Settings] Account deletion requested — opening mailto');
-            Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request');
-          },
-        },
-        {
           text: 'Delete Account',
           style: 'destructive',
           onPress: () => {
-            console.log('[Settings] Delete account confirmed — signing out');
-            Alert.alert(
-              'Account Deletion Requested',
-              'Your account deletion has been requested. You will be signed out now.',
-              [
-                {
-                  text: 'OK',
-                  onPress: () => {
-                    console.log('[Settings] Navigating to onboarding after deletion');
-                    router.replace('/onboarding');
-                  },
-                },
-              ]
-            );
+            console.log('[Settings] Delete account confirmed — opening mailto and signing out');
+            Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request&body=Please%20delete%20my%20account.');
+            router.replace('/onboarding');
           },
         },
       ]
