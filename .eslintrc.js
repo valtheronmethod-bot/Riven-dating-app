@@ -48,6 +48,12 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-var-requires': 'off'
       }
+    },
+    {
+      files: ['scripts/**/*.js', 'metro.config.js', 'babel.config.js'],
+      env: {
+        node: true,
+      }
     }
   ]
 };

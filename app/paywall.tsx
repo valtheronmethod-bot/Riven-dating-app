@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -184,6 +185,20 @@ export default function PaywallScreen() {
           <Text style={styles.finePrint}>
             Cancel anytime. Billed monthly. No hidden fees.
           </Text>
+          <View style={styles.legalLinks}>
+            <TouchableOpacity onPress={() => {
+              console.log('[Paywall] Privacy Policy pressed');
+              Linking.openURL('https://riven.app/privacy');
+            }}>
+              <Text style={styles.legalLink}>Privacy Policy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log('[Paywall] Terms of Service pressed');
+              Linking.openURL('https://riven.app/terms');
+            }}>
+              <Text style={styles.legalLink}>Terms of Service</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
     </>
@@ -337,5 +352,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
     marginTop: 8,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8,
+  },
+  legalLink: {
+    color: COLORS.textTertiary,
+    fontSize: 11,
+    textDecorationLine: 'underline',
   },
 });

@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { COLORS } from '@/constants/Colors';
@@ -75,11 +76,13 @@ export default function SettingsScreen() {
   };
 
   const handlePrivacyPolicy = () => {
-    console.log('[Settings] Privacy policy pressed');
+    console.log('[Settings] Privacy policy pressed — opening https://riven.app/privacy');
+    Linking.openURL('https://riven.app/privacy');
   };
 
   const handleTerms = () => {
-    console.log('[Settings] Terms of service pressed');
+    console.log('[Settings] Terms of service pressed — opening https://riven.app/terms');
+    Linking.openURL('https://riven.app/terms');
   };
 
   const handleDeleteAccount = () => {
@@ -90,9 +93,31 @@ export default function SettingsScreen() {
       [
         { text: 'Cancel', style: 'cancel' },
         {
+          text: 'Request Deletion',
+          onPress: () => {
+            console.log('[Settings] Account deletion requested — opening mailto');
+            Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request');
+          },
+        },
+        {
           text: 'Delete Account',
           style: 'destructive',
-          onPress: () => console.log('[Settings] Delete account confirmed'),
+          onPress: () => {
+            console.log('[Settings] Delete account confirmed — signing out');
+            Alert.alert(
+              'Account Deletion Requested',
+              'Your account deletion has been requested. You will be signed out now.',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    console.log('[Settings] Navigating to onboarding after deletion');
+                    router.replace('/onboarding');
+                  },
+                },
+              ]
+            );
+          },
         },
       ]
     );

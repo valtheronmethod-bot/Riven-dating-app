@@ -4,10 +4,10 @@
     "slug": "riven",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/55.png",
+    "icon": "./assets/images/icon-1024.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/55.png",
+      "image": "./assets/images/icon-1024.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },
@@ -29,7 +29,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/55.png",
+        "foregroundImage": "./assets/images/icon-1024.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.valtheron.riven"

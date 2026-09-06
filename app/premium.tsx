@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -181,6 +182,20 @@ export default function PremiumScreen() {
         <Text style={styles.finePrint}>
           Subscription auto-renews monthly. Cancel anytime in App Store settings.
         </Text>
+        <View style={styles.legalLinks}>
+          <TouchableOpacity onPress={() => {
+            console.log('[Premium] Privacy Policy pressed');
+            Linking.openURL('https://riven.app/privacy');
+          }}>
+            <Text style={styles.legalLink}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log('[Premium] Terms of Service pressed');
+            Linking.openURL('https://riven.app/terms');
+          }}>
+            <Text style={styles.legalLink}>Terms of Service</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -331,5 +346,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     textAlign: 'center',
     lineHeight: 16,
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8,
+  },
+  legalLink: {
+    color: COLORS.textTertiary,
+    fontSize: 11,
+    textDecorationLine: 'underline',
   },
 });
