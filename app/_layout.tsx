@@ -1,4 +1,8 @@
-import "react-native-reanimated";
+try {
+  require("react-native-reanimated");
+} catch (e) {
+  console.warn("[Reanimated] Native module not available:", e);
+}
 import React, { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";

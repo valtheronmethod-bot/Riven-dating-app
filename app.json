@@ -34,6 +34,7 @@
       }
     },
     "android": {
+      "newArchEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon-1024.png",
         "backgroundColor": "#FFFFFF"
