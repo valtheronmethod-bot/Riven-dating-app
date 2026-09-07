@@ -71,7 +71,9 @@
     },
     "extra": {
       "router": {},
-      "oneSignalAppId": "9135199d-954a-4172-aa70-cb899ecf2b32"
+      "oneSignalAppId": "9135199d-954a-4172-aa70-cb899ecf2b32",
+      "revenueCatApiKeyIos": "appl_mteJTZDNgRuNkLUuUSoLnzRWvDV",
+      "revenueCatApiKeyAndroid": "goog_KeHOHSIFBZzAlHlYlSdWBFMFlIy"
     }
   }
 }

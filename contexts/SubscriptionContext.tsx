@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // TEMPLATE_MARKER: revenuecat-subscription-context
 const PREMIUM_KEY = '@riven_is_premium';
-const RC_API_KEY_IOS = 'appl_placeholder';
-const RC_API_KEY_ANDROID = 'goog_placeholder';
+const RC_API_KEY_IOS = 'appl_mteJTZDNgRuNkLUuUSoLnzRWvDV';
+const RC_API_KEY_ANDROID = 'goog_KeHOHSIFBZzAlHlYlSdWBFMFlIy';
 const ENTITLEMENT_ID = 'pro';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
