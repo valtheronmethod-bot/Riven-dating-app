@@ -32,47 +32,44 @@ export default function PremiumScreen() {
 
   const handleSubscribe = async () => {
     console.log('[Premium] Subscribe button pressed —', priceDisplay);
-    if (packages.length > 0) {
-      setPurchasing(true);
-      try {
-        const success = await purchasePackage(packages[0]);
-        if (success) {
-          console.log('[Premium] Purchase successful — navigating back');
-          Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.');
-          router.back();
-        }
-      } catch (err: any) {
-        console.log('[Premium] Purchase failed:', err?.message ?? err);
-        Alert.alert('Purchase Failed', err?.message ?? 'Something went wrong. Please try again.');
-      } finally {
-        setPurchasing(false);
-      }
-    } else {
-      // No RC packages — fallback simulation
-      console.log('[Premium] No RC packages, using fallback purchase flow');
-      Alert.alert(
-        'Start Premium',
-        `Subscribe to Riven Premium for ${priceDisplay}?`,
-        [
-          { text: 'Cancel', style: 'cancel', onPress: () => console.log('[Premium] Fallback purchase cancelled') },
-          {
-            text: 'Subscribe',
-            onPress: async () => {
-              console.log('[Premium] Fallback subscription confirmed');
-              // Use purchasePackage which handles the fallback internally
+    Alert.alert(
+      'Confirm Subscription',
+      `Subscribe to Riven Premium for ${priceDisplay}? Your subscription will auto-renew monthly. You can cancel anytime.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Subscribe',
+          onPress: async () => {
+            if (packages.length > 0) {
               setPurchasing(true);
               try {
-                await purchasePackage({} as any);
+                const success = await purchasePackage(packages[0]);
+                if (success) {
+                  console.log('[Premium] Purchase successful — navigating back');
+                  Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.');
+                  router.back();
+                }
+              } catch (err: unknown) {
+                const e = err as { message?: string };
+                console.log('[Premium] Purchase failed:', e?.message ?? err);
+                Alert.alert('Purchase Failed', e?.message ?? 'Something went wrong. Please try again.');
+              } finally {
+                setPurchasing(false);
+              }
+            } else {
+              setPurchasing(true);
+              try {
+                await purchasePackage({} as never);
                 Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.');
                 router.back();
               } finally {
                 setPurchasing(false);
               }
-            },
+            }
           },
-        ]
-      );
-    }
+        },
+      ]
+    );
   };
 
   const handleRestore = async () => {
@@ -138,6 +135,25 @@ export default function PremiumScreen() {
           ))}
         </View>
 
+        {/* Fine print + legal links — must appear BEFORE subscribe button per Apple guidelines */}
+        <Text style={styles.finePrint}>
+          Subscription auto-renews monthly at the price shown. Cancel anytime in your App Store or Google Play account settings. By subscribing you agree to our Terms of Service and Privacy Policy.
+        </Text>
+        <View style={styles.legalLinks}>
+          <TouchableOpacity onPress={() => {
+            console.log('[Premium] Privacy Policy pressed');
+            Linking.openURL('https://riven.app/privacy');
+          }}>
+            <Text style={styles.legalLink}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            console.log('[Premium] Terms of Service pressed');
+            Linking.openURL('https://riven.app/terms');
+          }}>
+            <Text style={styles.legalLink}>Terms of Service</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Subscribe / Already Premium */}
         {isPremium ? (
           <View style={styles.alreadyPremium}>
@@ -178,24 +194,6 @@ export default function PremiumScreen() {
             <Text style={styles.restoreText}>Restore Purchases</Text>
           )}
         </TouchableOpacity>
-
-        <Text style={styles.finePrint}>
-          Subscription auto-renews monthly. Cancel anytime in App Store settings.
-        </Text>
-        <View style={styles.legalLinks}>
-          <TouchableOpacity onPress={() => {
-            console.log('[Premium] Privacy Policy pressed');
-            Linking.openURL('https://riven.app/privacy');
-          }}>
-            <Text style={styles.legalLink}>Privacy Policy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            console.log('[Premium] Terms of Service pressed');
-            Linking.openURL('https://riven.app/terms');
-          }}>
-            <Text style={styles.legalLink}>Terms of Service</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </View>
   );

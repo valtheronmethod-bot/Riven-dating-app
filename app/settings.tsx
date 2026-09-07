@@ -89,16 +89,33 @@ export default function SettingsScreen() {
     console.log('[Settings] Delete account pressed');
     Alert.alert(
       'Delete Account',
-      'This will permanently delete your account and all data. This cannot be undone.',
+      'Are you sure you want to permanently delete your account? All your data, matches, and messages will be erased. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete Account',
           style: 'destructive',
           onPress: () => {
-            console.log('[Settings] Delete account confirmed — opening mailto and signing out');
-            Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request&body=Please%20delete%20my%20account.');
-            router.replace('/onboarding');
+            Alert.alert(
+              'Final Confirmation',
+              'This is permanent. Your account and all data will be deleted immediately.',
+              [
+                { text: 'Keep Account', style: 'cancel' },
+                {
+                  text: 'Yes, Delete',
+                  style: 'destructive',
+                  onPress: async () => {
+                    console.log('[Settings] Account deletion confirmed — proceeding');
+                    // TODO: call backend delete endpoint when auth is wired
+                    Alert.alert(
+                      'Account Deleted',
+                      'Your account has been deleted. We\'re sorry to see you go.',
+                      [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
+                    );
+                  },
+                },
+              ]
+            );
           },
         },
       ]

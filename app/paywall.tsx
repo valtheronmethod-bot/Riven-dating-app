@@ -140,6 +140,25 @@ export default function PaywallScreen() {
             ))}
           </View>
 
+          {/* Fine print + legal links — must appear BEFORE subscribe button per Apple guidelines */}
+          <Text style={styles.finePrint}>
+            Subscription auto-renews monthly at the price shown. Cancel anytime in your App Store or Google Play account settings. By subscribing you agree to our Terms of Service and Privacy Policy.
+          </Text>
+          <View style={styles.legalLinks}>
+            <TouchableOpacity onPress={() => {
+              console.log('[Paywall] Privacy Policy pressed');
+              Linking.openURL('https://riven.app/privacy');
+            }}>
+              <Text style={styles.legalLink}>Privacy Policy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log('[Paywall] Terms of Service pressed');
+              Linking.openURL('https://riven.app/terms');
+            }}>
+              <Text style={styles.legalLink}>Terms of Service</Text>
+            </TouchableOpacity>
+          </View>
+
           {/* CTA */}
           {isPremium ? (
             <View style={styles.alreadyPremium}>
@@ -181,24 +200,6 @@ export default function PaywallScreen() {
           <TouchableOpacity onPress={handleMaybeLater} style={styles.laterBtn}>
             <Text style={styles.laterText}>Maybe Later</Text>
           </TouchableOpacity>
-
-          <Text style={styles.finePrint}>
-            Cancel anytime. Billed monthly. No hidden fees.
-          </Text>
-          <View style={styles.legalLinks}>
-            <TouchableOpacity onPress={() => {
-              console.log('[Paywall] Privacy Policy pressed');
-              Linking.openURL('https://riven.app/privacy');
-            }}>
-              <Text style={styles.legalLink}>Privacy Policy</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-              console.log('[Paywall] Terms of Service pressed');
-              Linking.openURL('https://riven.app/terms');
-            }}>
-              <Text style={styles.legalLink}>Terms of Service</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </View>
     </>
