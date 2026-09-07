@@ -130,7 +130,7 @@ export default function SettingsScreen() {
                         'Deletion Failed',
                         'We could not delete your account automatically. You can try again or request manual deletion via support.',
                         [
-                          { text: 'Try Again', onPress: () => {} },
+                          { text: 'Try Again', onPress: () => handleDeleteAccount() },
                           {
                             text: 'Contact Support',
                             onPress: () => Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request'),

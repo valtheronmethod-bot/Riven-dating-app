@@ -28,7 +28,9 @@ export default function PremiumScreen() {
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
 
-  const priceDisplay = packages.length > 0 ? (packages[0].product?.priceString ?? currentPrice) + '/mo' : currentPrice;
+  const priceDisplay = packages.length > 0
+    ? (packages[0].product?.priceString ?? currentPrice.replace('/mo', '')) + '/mo'
+    : currentPrice;
 
   const handleSubscribe = async () => {
     console.log('[Premium] Subscribe button pressed —', priceDisplay);
