@@ -105,13 +105,33 @@ export default function SettingsScreen() {
                   text: 'Yes, Delete',
                   style: 'destructive',
                   onPress: async () => {
-                    console.log('[Settings] Account deletion confirmed — proceeding');
-                    // TODO: call backend delete endpoint when auth is wired
-                    Alert.alert(
-                      'Account Deleted',
-                      'Your account has been deleted. We\'re sorry to see you go.',
-                      [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
-                    );
+                    console.log('[Settings] Account deletion confirmed — calling backend');
+                    try {
+                      const response = await fetch(
+                        'https://owwzsvljrbibevrpjirt.supabase.co/functions/v1/delete-account',
+                        {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ userId: 'self' }),
+                        }
+                      );
+                      const data = await response.json();
+                      if (data.error) throw new Error(data.error);
+                      console.log('[Settings] Account deleted successfully');
+                      Alert.alert(
+                        'Account Deleted',
+                        "Your account has been permanently deleted. We're sorry to see you go.",
+                        [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
+                      );
+                    } catch (err: unknown) {
+                      const e = err as { message?: string };
+                      console.log('[Settings] Account deletion error:', e?.message ?? err);
+                      Alert.alert(
+                        'Deletion Failed',
+                        'We could not delete your account right now. Please try again or contact support@riven.app.',
+                        [{ text: 'OK' }]
+                      );
+                    }
                   },
                 },
               ]

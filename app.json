@@ -16,10 +16,10 @@
       "bundleIdentifier": "com.valtheron.riven",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "NSLocationWhenInUseUsageDescription": "Riven uses your location to show you people nearby.",
-        "NSPhotoLibraryAddUsageDescription": "Riven needs permission to save photos to your library.",
-        "NSCameraUsageDescription": "Riven needs camera access to take profile photos and verify your identity.",
-        "NSPhotoLibraryUsageDescription": "Riven needs photo library access to upload your profile pictures.",
+        "NSLocationWhenInUseUsageDescription": "Riven uses your precise location only while the app is open to show you compatible people nearby. Your location is never shared without your explicit consent.",
+        "NSCameraUsageDescription": "Riven uses your camera to take profile photos and complete identity verification. Photos are only uploaded when you choose to share them.",
+        "NSPhotoLibraryUsageDescription": "Riven accesses your photo library so you can choose profile pictures to upload. No photos are accessed without your selection.",
+        "NSPhotoLibraryAddUsageDescription": "Riven saves verification or profile photos to your library only when you request it.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": false,
           "NSExceptionDomains": {}
