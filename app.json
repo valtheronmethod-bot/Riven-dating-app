@@ -38,8 +38,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.valtheron.riven",
-      "usesCleartextTraffic": false,
-      "newArchEnabled": true
+      "usesCleartextTraffic": false
     },
     "web": {
       "favicon": "./assets/images/newly.png",
@@ -66,14 +65,16 @@
     ],
     "scheme": "riven",
     "experiments": {
-      "typedRoutes": true,
-      "newArchEnabled": true
+      "typedRoutes": true
     },
     "extra": {
       "router": {},
       "oneSignalAppId": "9135199d-954a-4172-aa70-cb899ecf2b32",
       "revenueCatApiKeyIos": "appl_mteJTZDNgRuNkLUuUSoLnzRWvDV",
       "revenueCatApiKeyAndroid": "goog_KeHOHSIFBZzAlHlYlSdWBFMFlIy"
+    },
+    "notification": {
+      "icon": "./assets/notification-icon.png"
     }
   }
 }
