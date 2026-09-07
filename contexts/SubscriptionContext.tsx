@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const PREMIUM_KEY = '@riven_is_premium';
 const RC_API_KEY_IOS = 'appl_placeholder';
 const RC_API_KEY_ANDROID = 'goog_placeholder';
-const ENTITLEMENT_ID = 'premium';
+const ENTITLEMENT_ID = 'pro';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PurchasesPackage = any;
