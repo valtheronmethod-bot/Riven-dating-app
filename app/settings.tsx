@@ -101,7 +101,7 @@ export default function SettingsScreen() {
       console.log('[Settings] Account deleted successfully');
       Alert.alert(
         'Account Deleted',
-        'Your account has been permanently deleted.',
+        'Your account and all data have been permanently deleted.',
         [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
       );
     } catch (err: unknown) {
@@ -122,25 +122,40 @@ export default function SettingsScreen() {
   };
 
   const handleDeleteAccount = () => {
-    console.log('[Settings] Delete account pressed');
+    console.log('[Settings] Delete account pressed — step 1');
     Alert.alert(
-      'Delete Account',
-      'Are you sure you want to permanently delete your account? All your data, matches, and messages will be erased. This cannot be undone.',
+      'Delete Account?',
+      'This will permanently delete your account, all matches, messages, and profile data. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Delete Account',
+          text: 'Continue',
           style: 'destructive',
           onPress: () => {
+            console.log('[Settings] Delete account — step 2');
             Alert.alert(
-              'Final Confirmation',
-              'This is permanent. Your account and all data will be deleted immediately.',
+              'Are You Sure?',
+              'You will lose all your matches and messages forever. There is no way to recover your account.',
               [
-                { text: 'Keep Account', style: 'cancel' },
+                { text: 'Go Back', style: 'cancel' },
                 {
-                  text: 'Yes, Delete',
+                  text: 'Yes, Delete My Account',
                   style: 'destructive',
-                  onPress: () => executeAccountDeletion(),
+                  onPress: () => {
+                    console.log('[Settings] Delete account — step 3 final');
+                    Alert.alert(
+                      'Final Confirmation',
+                      'Type "DELETE" to confirm. By proceeding you acknowledge this action is permanent and irreversible.',
+                      [
+                        { text: 'Cancel', style: 'cancel' },
+                        {
+                          text: 'Delete Forever',
+                          style: 'destructive',
+                          onPress: () => executeAccountDeletion(),
+                        },
+                      ]
+                    );
+                  },
                 },
               ]
             );

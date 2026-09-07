@@ -119,7 +119,11 @@ export default function PremiumScreen() {
         {/* Crown + title */}
         <Text style={styles.crown}>👑</Text>
         <Text style={styles.title}>Riven Premium</Text>
-        <Text style={styles.price}>{priceDisplay}</Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color={COLORS.gold} style={{ marginVertical: 8 }} />
+        ) : (
+          <Text style={styles.price}>{priceDisplay}</Text>
+        )}
         <Text style={styles.pricePeriod}>Cancel anytime · No hidden fees</Text>
 
         {/* Features */}
@@ -139,7 +143,10 @@ export default function PremiumScreen() {
 
         {/* Fine print + legal links — must appear BEFORE subscribe button per Apple guidelines */}
         <Text style={styles.finePrint}>
-          Subscription auto-renews monthly at the price shown. Cancel anytime in your App Store or Google Play account settings. By subscribing you agree to our Terms of Service and Privacy Policy.
+          Subscription auto-renews monthly. Cancel anytime:{'\n'}
+          {'• '}iOS: Settings → [Your Name] → Subscriptions → Riven → Cancel{'\n'}
+          {'• '}Android: Google Play → Menu → Subscriptions → Riven → Cancel{'\n'}
+          By subscribing you agree to our Terms of Service and Privacy Policy.
         </Text>
         <View style={styles.legalLinks}>
           <TouchableOpacity
@@ -179,7 +186,7 @@ export default function PremiumScreen() {
               end={{ x: 1, y: 0 }}
               style={styles.subscribeBtn}
             >
-              {purchasing ? (
+              {purchasing || isLoading ? (
                 <ActivityIndicator color="#000" />
               ) : (
                 <Text style={styles.subscribeBtnText}>
