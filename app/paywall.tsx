@@ -32,49 +32,49 @@ export default function PaywallScreen() {
 
   const handleSubscribe = async () => {
     console.log('[Paywall] Start Premium pressed —', priceDisplay);
-    if (packages.length > 0) {
-      setPurchasing(true);
-      try {
-        const success = await purchasePackage(packages[0]);
-        if (success) {
-          console.log('[Paywall] Purchase successful — navigating to tabs');
-          Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.', [
-            { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)/(discover)') },
-          ]);
-        }
-      } catch (err: unknown) {
-        const e = err as { message?: string };
-        console.log('[Paywall] Purchase failed:', e?.message ?? err);
-        Alert.alert('Purchase Failed', e?.message ?? 'Something went wrong. Please try again.');
-      } finally {
-        setPurchasing(false);
-      }
-    } else {
-      // No RC packages — fallback simulation for dev
-      console.log('[Paywall] No RC packages available, using fallback purchase flow');
-      Alert.alert(
-        'Start Premium',
-        `Subscribe to Riven Premium for ${priceDisplay}?`,
-        [
-          { text: 'Cancel', style: 'cancel', onPress: () => console.log('[Paywall] Fallback purchase cancelled') },
-          {
-            text: 'Subscribe',
-            onPress: async () => {
-              console.log('[Paywall] Fallback subscription confirmed');
+
+    Alert.alert(
+      'Confirm Subscription',
+      `Subscribe to Riven Premium for ${priceDisplay}? Your subscription will auto-renew monthly. You can cancel anytime.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Subscribe',
+          onPress: async () => {
+            if (packages.length > 0) {
+              setPurchasing(true);
+              try {
+                const success = await purchasePackage(packages[0]);
+                if (success) {
+                  console.log('[Paywall] Purchase successful — navigating to tabs');
+                  Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.', [
+                    { text: "Let's Go!", onPress: () => router.replace('/(tabs)/(discover)') },
+                  ]);
+                }
+              } catch (err: unknown) {
+                const e = err as { message?: string };
+                console.log('[Paywall] Purchase failed:', e?.message ?? err);
+                Alert.alert('Purchase Failed', e?.message ?? 'Something went wrong. Please try again.');
+              } finally {
+                setPurchasing(false);
+              }
+            } else {
+              // No RC packages — fallback simulation for dev
+              console.log('[Paywall] No RC packages available, using fallback purchase flow');
               setPurchasing(true);
               try {
                 await purchasePackage({} as never);
                 Alert.alert('Welcome to Premium! 👑', 'You now have access to all premium features.', [
-                  { text: 'Let\'s Go!', onPress: () => router.replace('/(tabs)/(discover)') },
+                  { text: "Let's Go!", onPress: () => router.replace('/(tabs)/(discover)') },
                 ]);
               } finally {
                 setPurchasing(false);
               }
-            },
+            }
           },
-        ]
-      );
-    }
+        },
+      ]
+    );
   };
 
   const handleRestore = async () => {
