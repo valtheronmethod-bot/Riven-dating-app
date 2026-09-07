@@ -58,7 +58,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [currentPrice, setCurrentPrice] = useState('$19.99/mo');
 
   useEffect(() => {
-    initRevenueCat();
+    initRevenueCat().catch(e => console.warn('[Subscription] init failed:', e));
   }, []);
 
   const initRevenueCat = async () => {
@@ -103,7 +103,10 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         setPackages(pkgs);
         if (pkgs.length > 0) {
           const priceStr = pkgs[0].product?.priceString;
-          if (priceStr) setCurrentPrice(priceStr + '/mo');
+          if (priceStr) {
+            const cleaned = priceStr.replace(/\/mo$/i, '');
+            setCurrentPrice(cleaned + '/mo');
+          }
         }
         console.log('[Subscription] Packages loaded:', pkgs.length);
       }
