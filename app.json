@@ -74,7 +74,7 @@
       "revenueCatApiKeyAndroid": "goog_KeHOHSIFBZzAlHlYlSdWBFMFlIy"
     },
     "notification": {
-      "icon": "./assets/notification-icon.png"
+      "icon": "./assets/images/adaptive-icon.png"
     }
   }
 }

@@ -85,6 +85,42 @@ export default function SettingsScreen() {
     Linking.openURL('https://riven.app/terms');
   };
 
+  const executeAccountDeletion = async () => {
+    console.log('[Settings] Account deletion confirmed — calling backend');
+    try {
+      const response = await fetch(
+        'https://owwzsvljrbibevrpjirt.supabase.co/functions/v1/delete-account',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: 'self' }),
+        }
+      );
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+      console.log('[Settings] Account deleted successfully');
+      Alert.alert(
+        'Account Deleted',
+        'Your account has been permanently deleted.',
+        [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
+      );
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      console.log('[Settings] Account deletion error:', e?.message ?? err);
+      Alert.alert(
+        'Deletion Failed',
+        'We could not delete your account. Please contact support@riven.app.',
+        [
+          {
+            text: 'Contact Support',
+            onPress: () => Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request'),
+          },
+          { text: 'Cancel', style: 'cancel' },
+        ]
+      );
+    }
+  };
+
   const handleDeleteAccount = () => {
     console.log('[Settings] Delete account pressed');
     Alert.alert(
@@ -104,42 +140,7 @@ export default function SettingsScreen() {
                 {
                   text: 'Yes, Delete',
                   style: 'destructive',
-                  onPress: async () => {
-                    console.log('[Settings] Account deletion confirmed — calling backend');
-                    try {
-                      const response = await fetch(
-                        'https://owwzsvljrbibevrpjirt.supabase.co/functions/v1/delete-account',
-                        {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ userId: 'self' }),
-                        }
-                      );
-                      const data = await response.json();
-                      if (data.error) throw new Error(data.error);
-                      console.log('[Settings] Account deleted successfully');
-                      Alert.alert(
-                        'Account Deleted',
-                        "Your account has been permanently deleted. We're sorry to see you go.",
-                        [{ text: 'OK', onPress: () => router.replace('/onboarding') }]
-                      );
-                    } catch (err: unknown) {
-                      const e = err as { message?: string };
-                      console.log('[Settings] Account deletion error:', e?.message ?? err);
-                      Alert.alert(
-                        'Deletion Failed',
-                        'We could not delete your account automatically. You can try again or request manual deletion via support.',
-                        [
-                          { text: 'Try Again', onPress: () => handleDeleteAccount() },
-                          {
-                            text: 'Contact Support',
-                            onPress: () => Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request'),
-                          },
-                          { text: 'Cancel', style: 'cancel' },
-                        ]
-                      );
-                    }
-                  },
+                  onPress: () => executeAccountDeletion(),
                 },
               ]
             );

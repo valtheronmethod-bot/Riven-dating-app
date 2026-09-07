@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,9 +53,28 @@ export default function PrivacySettingsScreen() {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: () => {
+          onPress: async () => {
             console.log('[PrivacySettings] Location data deletion confirmed');
-            Alert.alert('Done', 'Your location data has been deleted.');
+            try {
+              await fetch(
+                'https://owwzsvljrbibevrpjirt.supabase.co/functions/v1/delete-account',
+                {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'delete_location_data' }),
+                }
+              );
+              Alert.alert('Done', 'Your location data has been deleted.');
+            } catch {
+              Alert.alert(
+                'Could Not Delete',
+                'Please contact support@riven.app to request location data deletion.',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Email Support', onPress: () => Linking.openURL('mailto:support@riven.app?subject=Location%20Data%20Deletion%20Request') },
+                ]
+              );
+            }
           },
         },
       ]
@@ -63,11 +83,22 @@ export default function PrivacySettingsScreen() {
 
   const handleDownloadData = () => {
     console.log('[PrivacySettings] Download my data pressed');
-    Alert.alert('Download Data', 'Your data export will be emailed to you within 24 hours.');
+    Alert.alert(
+      'Download Your Data',
+      'We will email you a copy of all your data within 24 hours.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Request Export',
+          onPress: () => Linking.openURL('mailto:support@riven.app?subject=Data%20Export%20Request'),
+        },
+      ]
+    );
   };
 
   const handlePrivacyPolicy = () => {
     console.log('[PrivacySettings] Privacy policy pressed');
+    Linking.openURL('https://riven.app/privacy');
   };
 
   const handleBack = () => {
