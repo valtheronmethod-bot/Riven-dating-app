@@ -29,7 +29,7 @@ export default function PaywallScreen() {
   const [restoring, setRestoring] = useState(false);
 
   const priceDisplay = packages.length > 0
-    ? (packages[0].product?.priceString ?? currentPrice.replace('/mo', '')) + '/mo'
+    ? (packages[0].product?.priceString ?? currentPrice).replace(/\/mo$/i, '').trim() + '/mo'
     : currentPrice;
 
   const handleSubscribe = async () => {
@@ -196,13 +196,15 @@ export default function PaywallScreen() {
           )}
 
           {/* Restore */}
-          <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn} disabled={restoring}>
-            {restoring ? (
-              <ActivityIndicator size="small" color={COLORS.textTertiary} />
-            ) : (
-              <Text style={styles.restoreText}>Restore Purchases</Text>
-            )}
-          </TouchableOpacity>
+          {packages.length > 0 && (
+            <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn} disabled={restoring}>
+              {restoring ? (
+                <ActivityIndicator size="small" color={COLORS.textTertiary} />
+              ) : (
+                <Text style={styles.restoreText}>Already subscribed? Restore Purchases</Text>
+              )}
+            </TouchableOpacity>
+          )}
 
           {/* Maybe Later */}
           <TouchableOpacity onPress={handleMaybeLater} style={styles.laterBtn}>
