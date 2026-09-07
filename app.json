@@ -38,7 +38,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.valtheron.riven",
-      "usesCleartextTraffic": false
+      "usesCleartextTraffic": false,
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/images/newly.png",
@@ -48,7 +49,7 @@
       [
         "onesignal-expo-plugin",
         {
-          "mode": "development"
+          "mode": "production"
         }
       ],
       [
@@ -65,7 +66,8 @@
     ],
     "scheme": "riven",
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "newArchEnabled": true
     },
     "extra": {
       "router": {},
