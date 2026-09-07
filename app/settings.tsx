@@ -128,8 +128,15 @@ export default function SettingsScreen() {
                       console.log('[Settings] Account deletion error:', e?.message ?? err);
                       Alert.alert(
                         'Deletion Failed',
-                        'We could not delete your account right now. Please try again or contact support@riven.app.',
-                        [{ text: 'OK' }]
+                        'We could not delete your account automatically. You can try again or request manual deletion via support.',
+                        [
+                          { text: 'Try Again', onPress: () => {} },
+                          {
+                            text: 'Contact Support',
+                            onPress: () => Linking.openURL('mailto:support@riven.app?subject=Account%20Deletion%20Request'),
+                          },
+                          { text: 'Cancel', style: 'cancel' },
+                        ]
                       );
                     }
                   },

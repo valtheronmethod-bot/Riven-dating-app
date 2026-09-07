@@ -140,16 +140,22 @@ export default function PremiumScreen() {
           Subscription auto-renews monthly at the price shown. Cancel anytime in your App Store or Google Play account settings. By subscribing you agree to our Terms of Service and Privacy Policy.
         </Text>
         <View style={styles.legalLinks}>
-          <TouchableOpacity onPress={() => {
-            console.log('[Premium] Privacy Policy pressed');
-            Linking.openURL('https://riven.app/privacy');
-          }}>
+          <TouchableOpacity
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            style={{ padding: 8 }}
+            onPress={() => {
+              console.log('[Premium] Privacy Policy pressed');
+              Linking.openURL('https://riven.app/privacy');
+            }}>
             <Text style={styles.legalLink}>Privacy Policy</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            console.log('[Premium] Terms of Service pressed');
-            Linking.openURL('https://riven.app/terms');
-          }}>
+          <TouchableOpacity
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            style={{ padding: 8 }}
+            onPress={() => {
+              console.log('[Premium] Terms of Service pressed');
+              Linking.openURL('https://riven.app/terms');
+            }}>
             <Text style={styles.legalLink}>Terms of Service</Text>
           </TouchableOpacity>
         </View>
