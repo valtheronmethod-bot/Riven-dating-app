@@ -46,14 +46,19 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
-  const [loaded] = useFonts({
+  const [loaded, fontError] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
     const checkOnboarding = async () => {
-      const hasOnboarded = await AsyncStorage.getItem("@riven_has_onboarded");
-      setInitialRoute(hasOnboarded === "true" ? "(tabs)" : "onboarding");
+      try {
+        const hasOnboarded = await AsyncStorage.getItem("@riven_has_onboarded");
+        setInitialRoute(hasOnboarded === "true" ? "(tabs)" : "onboarding");
+      } catch (e) {
+        console.warn("[Layout] AsyncStorage failed, defaulting to onboarding:", e);
+        setInitialRoute("onboarding");
+      }
     };
     checkOnboarding();
   }, []);
@@ -64,43 +69,51 @@ export default function RootLayout() {
     }
   }, [loaded, initialRoute]);
 
-  if (!loaded || initialRoute === null) {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (initialRoute === null) setInitialRoute("onboarding");
+      SplashScreen.hideAsync().catch(() => {});
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if ((!loaded && !fontError) || initialRoute === null) {
     return null;
   }
 
   return (
-    <NotificationProvider>
-  <DevErrorBoundary>
-      <StatusBar style="light" animated />
-      <ThemeProvider value={RivenDarkTheme}>
-        <SafeAreaProvider>
-          <SubscriptionProvider>
-            <VerificationProvider>
-            <WidgetProvider>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <Stack initialRouteName={initialRoute}>
-                  <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                  <Stack.Screen name="chat/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="profile/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="location-share" options={{ headerShown: false, presentation: 'formSheet' }} />
-                  <Stack.Screen name="location-consent" options={{ headerShown: false, presentation: 'modal' }} />
-                  <Stack.Screen name="privacy-settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="edit-profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="premium" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
-                  <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
-                  <Stack.Screen name="notification-preferences" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                  <Stack.Screen name="verification" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
-                </Stack>
-                <SystemBars style="light" />
-              </GestureHandlerRootView>
-            </WidgetProvider>
-            </VerificationProvider>
-          </SubscriptionProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
+    <DevErrorBoundary>
+      <NotificationProvider>
+        <StatusBar style="light" animated />
+        <ThemeProvider value={RivenDarkTheme}>
+          <SafeAreaProvider>
+            <SubscriptionProvider>
+              <VerificationProvider>
+                <WidgetProvider>
+                  <GestureHandlerRootView style={{ flex: 1 }}>
+                    <Stack initialRouteName={initialRoute}>
+                      <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
+                      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                      <Stack.Screen name="chat/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="profile/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="location-share" options={{ headerShown: false, presentation: 'formSheet' }} />
+                      <Stack.Screen name="location-consent" options={{ headerShown: false, presentation: 'modal' }} />
+                      <Stack.Screen name="privacy-settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="edit-profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="premium" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+                      <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
+                      <Stack.Screen name="notification-preferences" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="verification" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+                    </Stack>
+                    <SystemBars style="light" />
+                  </GestureHandlerRootView>
+                </WidgetProvider>
+              </VerificationProvider>
+            </SubscriptionProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </NotificationProvider>
     </DevErrorBoundary>
-    </NotificationProvider>
   );
 }
