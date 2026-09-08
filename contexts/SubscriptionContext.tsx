@@ -31,24 +31,25 @@ const SubscriptionContext = createContext<SubscriptionContextType>({
   currentPrice: '$19.99/mo',
 });
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-let Purchases: typeof import('react-native-purchases').default | null = null;
+let _purchases: typeof import('react-native-purchases').default | null = null;
+let _purchasesLoaded = false;
 
-try {
-  // Dynamic require for graceful fallback on web/simulator.
-  // We also null-check the result because on some Android builds the native
-  // module may load without throwing but still return an empty/broken object.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const mod = require('react-native-purchases') as { default: typeof import('react-native-purchases').default } | null | undefined;
-  const candidate = mod?.default ?? null;
-  // Verify the module is actually usable before trusting it
-  if (candidate && typeof (candidate as { configure?: unknown }).configure === 'function') {
-    Purchases = candidate;
-  } else {
-    console.log('[Subscription] react-native-purchases loaded but native module is not functional');
+function getPurchases(): typeof import('react-native-purchases').default | null {
+  if (_purchasesLoaded) return _purchases;
+  _purchasesLoaded = true;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('react-native-purchases') as { default: typeof import('react-native-purchases').default } | null | undefined;
+    const candidate = mod?.default ?? null;
+    if (candidate && typeof (candidate as { configure?: unknown }).configure === 'function') {
+      _purchases = candidate;
+    } else {
+      console.log('[Subscription] react-native-purchases loaded but native module is not functional');
+    }
+  } catch (err) {
+    console.log('[Subscription] react-native-purchases not available (web/simulator):', err);
   }
-} catch (err) {
-  console.log('[Subscription] react-native-purchases not available (web/simulator):', err);
+  return _purchases;
 }
 
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
@@ -68,6 +69,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       const cached = await AsyncStorage.getItem(PREMIUM_KEY);
       if (cached === 'true') setIsPremium(true);
 
+      const Purchases = getPurchases();
       if (!Purchases) {
         console.log('[Subscription] RevenueCat SDK not available, using cached state');
         setIsLoading(false);
@@ -125,6 +127,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   const purchasePackage = useCallback(async (pkg: PurchasesPackage): Promise<boolean> => {
     console.log('[Subscription] Purchasing package:', pkg?.identifier, pkg?.product?.priceString);
+    const Purchases = getPurchases();
     if (!Purchases) {
       console.log('[Subscription] RevenueCat not available — simulating purchase');
       await setPremium(true);
@@ -152,6 +155,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
 
   const restorePurchases = useCallback(async (): Promise<boolean> => {
     console.log('[Subscription] Restoring purchases...');
+    const Purchases = getPurchases();
     if (!Purchases) {
       console.log('[Subscription] RevenueCat not available — cannot restore');
       return false;
