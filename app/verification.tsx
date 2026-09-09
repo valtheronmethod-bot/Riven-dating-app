@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -88,7 +89,11 @@ export default function VerificationScreen() {
         console.log('[Verification] Opening verification URL:', result.verification_url);
         await Linking.openURL(result.verification_url);
       } else {
-        console.warn('[Verification] No verification_url returned');
+        Alert.alert(
+        'Verification Unavailable',
+        'Identity verification is not configured yet. Please try again later or contact support.',
+        [{ text: 'OK' }]
+      );
       }
     } finally {
       setActionLoading(false);
