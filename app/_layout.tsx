@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { SystemBars } from "react-native-edge-to-edge";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -37,42 +37,36 @@ const RivenDarkTheme: Theme = {
   },
 };
 
+function OnboardingGate() {
+  const router = useRouter();
+  useEffect(() => {
+    console.log('[OnboardingGate] Checking onboarding status');
+    AsyncStorage.getItem('@riven_has_onboarded').then((val) => {
+      console.log('[OnboardingGate] @riven_has_onboarded =', val);
+      if (val !== 'true') {
+        console.log('[OnboardingGate] Redirecting to /onboarding');
+        router.replace('/onboarding');
+      }
+    }).catch((err) => {
+      console.warn('[OnboardingGate] AsyncStorage error, redirecting to /onboarding:', err);
+      router.replace('/onboarding');
+    });
+  }, []);
+  return null;
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   const [loaded, fontError] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
-    const checkOnboarding = async () => {
-      try {
-        const hasOnboarded = await AsyncStorage.getItem("@riven_has_onboarded");
-        setInitialRoute(hasOnboarded === "true" ? "(tabs)" : "onboarding");
-      } catch (e) {
-        console.warn("[Layout] AsyncStorage failed, defaulting to onboarding:", e);
-        setInitialRoute("onboarding");
-      }
-    };
-    checkOnboarding();
-  }, []);
+    if (loaded || fontError) SplashScreen.hideAsync();
+  }, [loaded, fontError]);
 
-  useEffect(() => {
-    if (loaded && initialRoute !== null) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, initialRoute]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (initialRoute === null) setInitialRoute("onboarding");
-      SplashScreen.hideAsync().catch(() => {});
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  if ((!loaded && !fontError) || initialRoute === null) {
+  if (!loaded && !fontError) {
     return null;
   }
 
@@ -86,7 +80,8 @@ export default function RootLayout() {
               <VerificationProvider>
                 <WidgetProvider>
                   <GestureHandlerRootView style={{ flex: 1 }}>
-                    <Stack initialRouteName={initialRoute}>
+                    <Stack>
+                      <OnboardingGate />
                       <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
                       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                       <Stack.Screen name="chat" options={{ headerShown: false, animation: 'slide_from_right' }} />
