@@ -6,8 +6,6 @@ import {
   Dimensions,
   Animated,
   TouchableOpacity,
-  Image,
-  ImageSourcePropType,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -16,13 +14,6 @@ import { COLORS } from '@/constants/Colors';
 import { AnimatedPressable } from '@/components/AnimatedPressable';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const LOGO_URL = 'https://prod-finalquest-user-projects-storage-bucket-aws.s3.amazonaws.com/user-projects/b786ed0f-b3a9-4fd9-a451-af874d7211fa/assets/images/7c2e5bc3-c614-429b-bb28-aa6d240f2cae.png';
-
-function resolveImageSource(source: string | number | ImageSourcePropType | undefined): ImageSourcePropType {
-  if (!source) return { uri: '' };
-  if (typeof source === 'string') return { uri: source };
-  return source as ImageSourcePropType;
-}
 
 const SLIDES = [
   {
@@ -96,7 +87,7 @@ export default function OnboardingScreen() {
 
       {/* Logo */}
       <View style={styles.logoContainer}>
-        <Image source={resolveImageSource(LOGO_URL)} style={styles.logo} resizeMode="contain" />
+        {/* TODO: add real logo artwork here — e.g. <Image source={require('../assets/images/logo.png')} style={styles.logo} resizeMode="contain" /> */}
         <Text style={styles.appName}>RIVEN</Text>
       </View>
 
@@ -160,11 +151,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginBottom: 40,
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 18,
   },
   appName: {
     color: COLORS.text,
