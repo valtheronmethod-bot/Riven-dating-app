@@ -89,8 +89,8 @@ export default function RootLayout() {
                     <Stack initialRouteName={initialRoute}>
                       <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
                       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                      <Stack.Screen name="chat/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                      <Stack.Screen name="profile/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="chat" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                      <Stack.Screen name="profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
                       <Stack.Screen name="location-share" options={{ headerShown: false, presentation: 'formSheet' }} />
                       <Stack.Screen name="location-consent" options={{ headerShown: false, presentation: 'modal' }} />
                       <Stack.Screen name="privacy-settings" options={{ headerShown: false, animation: 'slide_from_right' }} />
