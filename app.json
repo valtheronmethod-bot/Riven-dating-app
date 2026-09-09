@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/images/icon-1024.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#0D0D0F"
     },
     "ios": {
       "newArchEnabled": true,
@@ -37,10 +37,10 @@
       "newArchEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon-1024.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#0D0D0F"
       },
       "package": "com.valtheron.riven",
-      "usesCleartextTraffic": false
+      "permissions": ["android.permission.POST_NOTIFICATIONS"]
     },
     "web": {
       "favicon": "./assets/images/newly.png",
@@ -56,8 +56,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/notification-icon.png",
-          "color": "#0D0D0F"
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#C8102E"
         }
       ],
       "expo-font",
@@ -77,7 +77,7 @@
       "revenueCatApiKeyAndroid": "goog_KeHOHSIFBZzAlHlYlSdWBFMFlIy"
     },
     "notification": {
-      "icon": "./assets/images/adaptive-icon.png"
+      "icon": "./assets/images/notification-icon.png"
     }
   }
 }
