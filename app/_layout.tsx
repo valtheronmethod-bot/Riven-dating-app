@@ -81,7 +81,6 @@ export default function RootLayout() {
                 <WidgetProvider>
                   <GestureHandlerRootView style={{ flex: 1 }}>
                     <Stack>
-                      <OnboardingGate />
                       <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
                       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                       <Stack.Screen name="chat" options={{ headerShown: false, animation: 'slide_from_right' }} />
@@ -96,6 +95,7 @@ export default function RootLayout() {
                       <Stack.Screen name="notification-preferences" options={{ headerShown: false, animation: 'slide_from_right' }} />
                       <Stack.Screen name="verification" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
                     </Stack>
+                    <OnboardingGate />
                     <SystemBars style="light" />
                   </GestureHandlerRootView>
                 </WidgetProvider>

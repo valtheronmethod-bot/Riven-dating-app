@@ -40,7 +40,9 @@
         "backgroundColor": "#0D0D0F"
       },
       "package": "com.valtheron.riven",
-      "permissions": ["android.permission.POST_NOTIFICATIONS"]
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS"
+      ]
     },
     "web": {
       "favicon": "./assets/images/newly.png",
