@@ -12,7 +12,7 @@
       "backgroundColor": "#0D0D0F"
     },
     "ios": {
-      "newArchEnabled": true,
+      "newArchEnabled": false,
       "supportsTablet": true,
       "bundleIdentifier": "com.valtheron.riven",
       "infoPlist": {
@@ -34,7 +34,7 @@
       }
     },
     "android": {
-      "newArchEnabled": true,
+      "newArchEnabled": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon-1024.png",
         "backgroundColor": "#0D0D0F"
