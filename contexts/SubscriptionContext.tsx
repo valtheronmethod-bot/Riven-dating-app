@@ -28,7 +28,7 @@ const SubscriptionContext = createContext<SubscriptionContextType>({
   packages: [],
   purchasePackage: async () => false,
   restorePurchases: async () => false,
-  currentPrice: '$19.99/mo',
+  currentPrice: 'Loading...',
 });
 
 let _purchases: typeof import('react-native-purchases').default | null = null;
@@ -56,7 +56,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [packages, setPackages] = useState<PurchasesPackage[]>([]);
-  const [currentPrice, setCurrentPrice] = useState('$19.99/mo');
+  const [currentPrice, setCurrentPrice] = useState('Loading...');
 
   useEffect(() => {
     initRevenueCat().catch(e => console.warn('[Subscription] init failed:', e));
@@ -77,7 +77,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       }
 
       const apiKey = Platform.OS === 'ios' ? RC_API_KEY_IOS : RC_API_KEY_ANDROID;
-      if (!apiKey || apiKey === 'appl_placeholder' || apiKey === 'goog_placeholder') {
+      const key = apiKey as string;
+      if (!key || key === 'appl_placeholder' || key === 'goog_placeholder') {
         console.log('[Subscription] No RevenueCat API key configured, using cached state');
         setIsLoading(false);
         return;
@@ -88,7 +89,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         (Purchases as any).setLogLevel?.('DEBUG');
       }
 
-      await Purchases.configure({ apiKey });
+      await Purchases.configure({ apiKey: key });
       console.log('[Subscription] RevenueCat configured');
 
       // Check entitlement status

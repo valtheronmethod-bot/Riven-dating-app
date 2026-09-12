@@ -143,10 +143,7 @@ export default function PremiumScreen() {
 
         {/* Fine print + legal links — must appear BEFORE subscribe button per Apple guidelines */}
         <Text style={styles.finePrint}>
-          Subscription auto-renews monthly. Cancel anytime:{'\n'}
-          {'• '}iOS: Settings → [Your Name] → Subscriptions → Riven → Cancel{'\n'}
-          {'• '}Android: Google Play → Menu → Subscriptions → Riven → Cancel{'\n'}
-          By subscribing you agree to our Terms of Service and Privacy Policy.
+          Subscription auto-renews monthly. Cancel anytime in your device's app store settings. By subscribing you agree to our Terms of Service and Privacy Policy.
         </Text>
         <View style={styles.legalLinks}>
           <TouchableOpacity
@@ -202,15 +199,13 @@ export default function PremiumScreen() {
         </TouchableOpacity>
 
         {/* Restore purchases */}
-        {packages.length > 0 && (
-          <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn} disabled={restoring}>
-            {restoring ? (
-              <ActivityIndicator size="small" color={COLORS.textTertiary} />
-            ) : (
-              <Text style={styles.restoreText}>Already subscribed? Restore Purchases</Text>
-            )}
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={handleRestore} style={styles.restoreBtn} disabled={restoring}>
+          {restoring ? (
+            <ActivityIndicator size="small" color={COLORS.textTertiary} />
+          ) : (
+            <Text style={styles.restoreText}>Already subscribed? Restore Purchases</Text>
+          )}
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

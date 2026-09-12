@@ -145,7 +145,7 @@ export default function SettingsScreen() {
                     console.log('[Settings] Delete account — step 3 final');
                     Alert.alert(
                       'Final Confirmation',
-                      'Type "DELETE" to confirm. By proceeding you acknowledge this action is permanent and irreversible.',
+                      'This is your final confirmation. This action is permanent and cannot be undone.',
                       [
                         { text: 'Cancel', style: 'cancel' },
                         {
