@@ -34,6 +34,9 @@ if (!isWeb && isOneSignalAvailable()) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { OneSignal: OS } = require("react-native-onesignal");
+    // Native OneSignal throws "Must call 'initWithContext' before use" if any
+    // Notifications.* call precedes initialize(). Initialize here, at import time.
+    if (ONESIGNAL_APP_ID) OS.initialize(ONESIGNAL_APP_ID);
     OS.Notifications.addEventListener("click", (event: any) => {
       // Background notification tap handler — navigates when app opens from background
       console.log("[Notifications] Background notification clicked:", event);
