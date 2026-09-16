@@ -52,7 +52,8 @@
       [
         "onesignal-expo-plugin",
         {
-          "mode": "production"
+          "mode": "production",
+          "appGroupName": "group.com.valtheron.riven.onesignal"
         }
       ],
       [
