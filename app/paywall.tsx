@@ -192,7 +192,7 @@ export default function PaywallScreen() {
                   <ActivityIndicator color="#000" />
                 ) : (
                   <Text style={styles.subscribeBtnText}>
-                    Start Premium — {priceDisplay}
+                    {packages.length === 0 && isLoading ? 'Start Premium' : `Start Premium — ${priceDisplay}`}
                   </Text>
                 )}
               </LinearGradient>

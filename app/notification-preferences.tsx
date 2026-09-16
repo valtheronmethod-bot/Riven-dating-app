@@ -20,6 +20,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useNotifications } from "@/contexts/NotificationContext";
+import { COLORS } from "@/constants/Colors";
 
 // Notification categories - customize these for your app
 const NOTIFICATION_CATEGORIES = [
@@ -168,8 +169,8 @@ export default function NotificationPreferencesScreen() {
                   onValueChange={(value) =>
                     handleCategoryToggle(category.key, value)
                   }
-                  trackColor={{ false: "#E5E5EA", true: "#34C759" }}
-                  thumbColor="#fff"
+                  trackColor={{ false: COLORS.surfaceElevated, true: "#34C759" }}
+                  thumbColor={COLORS.text}
                 />
               </View>
             ))}
@@ -183,7 +184,7 @@ export default function NotificationPreferencesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F2F7",
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: "row",
@@ -191,19 +192,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E5EA",
+    borderBottomColor: COLORS.border,
   },
   backButton: {
     fontSize: 16,
-    color: "#007AFF",
+    color: COLORS.primary,
     width: 60,
   },
   title: {
     fontSize: 17,
     fontWeight: "600",
-    color: "#000",
+    color: COLORS.text,
   },
   content: {
     flex: 1,
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   },
   webMessage: {
     fontSize: 16,
-    color: "#8E8E93",
+    color: COLORS.textSecondary,
     textAlign: "center",
   },
   section: {
@@ -226,17 +227,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#8E8E93",
+    color: COLORS.textSecondary,
     textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 8,
     marginLeft: 4,
   },
   permissionCard: {
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: COLORS.text,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
@@ -256,22 +257,22 @@ const styles = StyleSheet.create({
   permissionTitle: {
     fontSize: 17,
     fontWeight: "600",
-    color: "#000",
+    color: COLORS.text,
   },
   permissionDescription: {
     fontSize: 14,
-    color: "#8E8E93",
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   enableButton: {
     marginTop: 16,
-    backgroundColor: "#007AFF",
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
   },
   enableButtonText: {
-    color: "#fff",
+    color: COLORS.text,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -279,11 +280,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.surface,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#F2F2F7",
+    borderBottomColor: COLORS.divider,
   },
   categoryText: {
     flex: 1,
@@ -291,11 +292,11 @@ const styles = StyleSheet.create({
   },
   categoryLabel: {
     fontSize: 16,
-    color: "#000",
+    color: COLORS.text,
   },
   categoryDescription: {
     fontSize: 13,
-    color: "#8E8E93",
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
 });

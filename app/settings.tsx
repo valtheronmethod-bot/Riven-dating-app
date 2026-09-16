@@ -33,7 +33,7 @@ function SettingsRow({ icon, label, onPress, danger, value }: SettingsRowProps) 
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { isPremium } = useSubscription();
+  const { isPremium, currentPrice } = useSubscription();
 
   const handleBack = () => {
     console.log('[Settings] Back pressed');
@@ -96,6 +96,10 @@ export default function SettingsScreen() {
           body: JSON.stringify({ userId: 'self' }),
         }
       );
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? `Server error ${response.status}`);
+      }
       const data = await response.json();
       if (data.error) throw new Error(data.error);
       console.log('[Settings] Account deleted successfully');
@@ -207,7 +211,7 @@ export default function SettingsScreen() {
           icon="⭐"
           label={isPremium ? 'Manage Subscription' : 'Upgrade to Premium'}
           onPress={handlePremium}
-          value={isPremium ? 'Active' : '$19.99/mo'}
+          value={isPremium ? 'Active' : currentPrice}
         />
       </View>
 
