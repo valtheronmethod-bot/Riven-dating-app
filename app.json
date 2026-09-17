@@ -49,8 +49,7 @@
       [
         "onesignal-expo-plugin",
         {
-          "mode": "production",
-          "smallerNotificationServiceExtension": true
+          "mode": "production"
         }
       ],
       [
